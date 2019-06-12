@@ -4,6 +4,30 @@ A library for Arduino to control BLVD20KM which is a brushless motor controller 
 
 # Usage
 
+## BLVD20KM configuration
+
+### SW 2
+
+Change switch 2 like this
+
+No | State | Role
+-- | ----- | ---
+1  | OFF   | Baudrate
+2  | OFF   | Baudrate
+3  | ON    | Baudrate
+4  | OFF   | Not used
+5  | ON    | Use Modbus Protocol
+6  | OFF   | Not used
+7  | ON if the BLVD02KM is end of RS485 chain | End point register
+8  | OFF   | Address upper bit
+
+Set 1-3 as 001 to use 115200bps.
+
+### SW 3
+
+Switch 3 means address of motor driver.
+If you use multiple motor, set different address for each motors.
+
 ## Connection
 
 ### LAN cable pinout of BLVD20KM
