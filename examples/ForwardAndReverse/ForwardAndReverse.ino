@@ -2,8 +2,9 @@
 
 #define RS485_DE 4
 #define RS485_RE 5
+#define MOTOR_ADDRESS 0 // 0 for udp
 
-BLVD20KM_asukiaaa motor(&Serial1, 0, RS485_DE, RS485_RE);
+BLVD20KM_asukiaaa motor(&Serial1, MOTOR_ADDRESS, RS485_DE, RS485_RE);
 
 uint16_t speed;
 
