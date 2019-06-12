@@ -41,9 +41,9 @@ If you use multiple motor, set different address for each motors.
 7: NC
 8: NC
 
-### Arduino <-> SP3485 <-> BLVD20KM
+### Arduino <-> Uart to RS485S Transceiver <-> BLVD20KM
 
-Arduino | SP3485 | BLVD20KM
+Arduino | Uart to RS485 | BLVD20KM
 --------|--------|------
 None    | A      | TR+ (LAN 3)
 None    | B      | TR- (LAN 6)
@@ -53,6 +53,8 @@ D3      | RE     | None
 D2      | DE     | None
 VCC     | 5V     | None
 GND     | GND    | GND (LAN 2)
+
+I checked connection with using [SparkFun Transceiver Breakout - RS-485](https://www.sparkfun.com/products/10124).
 
 ## Software
 
