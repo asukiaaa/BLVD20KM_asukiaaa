@@ -32,14 +32,16 @@ If you use multiple motor, set different address for each motors.
 
 ### LAN cable pinout of BLVD20KM
 
-1: NC
-2: GND
-3: TR+
-4: NC
-5: NC
-6: TR-
-7: NC
-8: NC
+No | Role
+---|-----
+1  | NC
+2  | GND
+3  | TR+
+4  | NC
+5  | NC
+6  | TR-
+7  | NC
+8  | NC
 
 ### Arduino <-> Uart to RS485S Transceiver <-> BLVD20KM
 
