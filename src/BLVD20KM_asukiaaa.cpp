@@ -24,19 +24,19 @@
 
 // #define DEBUG_PRINT
 
-unsigned short getCRC16(unsigned char const *buf, unsigned short len) {
+uint16_t getCRC16(uint8_t const *buf, uint16_t len) {
   // Serial.print("data len: ");
   // Serial.println(len);
-  // for (unsigned short i = 0; i < len; ++i) {
-  //   Serial.print(ptr[(unsigned char) i], HEX);
+  // for (uint16_t i = 0; i < len; ++i) {
+  //   Serial.print(ptr[(uint8_t) i], HEX);
   //   Serial.print(" ");
   //   if (i > 30) break;
   // }
   // Serial.println("");
 
-  unsigned short crc = 0xFFFF;
-  for (unsigned short pos = 0; pos < len; pos++) {
-    crc ^= (unsigned short)buf[pos];    // XOR byte into least sig. byte of crc
+  uint16_t crc = 0xFFFF;
+  for (uint16_t pos = 0; pos < len; pos++) {
+    crc ^= (uint16_t)buf[pos];    // XOR byte into least sig. byte of crc
     for (int i = 8; i != 0; i--) {    // Loop over each bit
       if ((crc & 0x0001) != 0) {      // If the LSB is set
         crc >>= 1;                    // Shift right and XOR 0xA001
@@ -50,7 +50,7 @@ unsigned short getCRC16(unsigned char const *buf, unsigned short len) {
   return crc;
 }
 
-BLVD20KM_asukiaaa::BLVD20KM_asukiaaa(HardwareSerial* serial, unsigned char address, unsigned char dePin, unsigned char rePin) {
+BLVD20KM_asukiaaa::BLVD20KM_asukiaaa(HardwareSerial* serial, uint8_t address, uint8_t dePin, uint8_t rePin) {
   this->serial = serial;
   this->address = address;
   this->dePin = dePin;
@@ -58,7 +58,7 @@ BLVD20KM_asukiaaa::BLVD20KM_asukiaaa(HardwareSerial* serial, unsigned char addre
 }
 
 // #ifndef __arm__
-// BLVD20KM_asukiaaa::BLVD20KM_asukiaaa(SoftwareSerial* serial, unsigned char address, unsigned char dePin, unsigned char rePin) {
+// BLVD20KM_asukiaaa::BLVD20KM_asukiaaa(SoftwareSerial* serial, uint8_t address, uint8_t dePin, uint8_t rePin) {
 //   this->softserial = serial;
 //   this->address = address;
 //   this->dePin = dePin;
@@ -78,8 +78,8 @@ void BLVD20KM_asukiaaa::begin() {
   // crcTest(); // for debugging
 }
 
-unsigned char BLVD20KM_asukiaaa::writeSpeedControlMode(unsigned short mode) {
-  unsigned char result;
+uint8_t BLVD20KM_asukiaaa::writeSpeedControlMode(uint16_t mode) {
+  uint8_t result;
   result = writeRegister(ADDR_ANALOG_MODE_L, mode);
   if (result != 0) {
     return result;
@@ -87,17 +87,17 @@ unsigned char BLVD20KM_asukiaaa::writeSpeedControlMode(unsigned short mode) {
   return writeConfigTrigger(); // trigger after setting ADDR_ANALOG_MODE
 }
 
-unsigned char BLVD20KM_asukiaaa::readSpeedControlMode(unsigned short *mode) {
+uint8_t BLVD20KM_asukiaaa::readSpeedControlMode(uint16_t *mode) {
   return readRegisters(ADDR_ANALOG_MODE_L, 1, mode);
 }
 
-unsigned char BLVD20KM_asukiaaa::writeConfigTrigger() {
+uint8_t BLVD20KM_asukiaaa::writeConfigTrigger() {
   return writeRegister(ADDR_CONFIG_L, 1);
 }
 
-unsigned short createMotorControl16bit(unsigned char motorDirection, bool freeLockOnStop = true, bool slowChange = true, unsigned char motorDataNum = 0) {
+uint16_t createMotorControl16bit(uint8_t motorDirection, bool freeLockOnStop = true, bool slowChange = true, uint8_t motorDataNum = 0) {
   // MB-FREE, -, STOP-MODE, REV, FWD, M1, M2, M0
-  unsigned short bits = 0x0000;
+  uint16_t bits = 0x0000;
   switch (motorDirection) {
   case MOTOR_DIRECTOIN_REVERSE:
     bits |= MOTOR_REVERSE_BIT;
@@ -118,53 +118,53 @@ unsigned short createMotorControl16bit(unsigned char motorDirection, bool freeLo
   return bits;
 }
 
-unsigned char BLVD20KM_asukiaaa::writeForward() {
+uint8_t BLVD20KM_asukiaaa::writeForward() {
 #ifdef DEBUG_PRINT
   Serial.println("forward");
 #endif
-  // unsigned short data16bit = B10101000; // forward and unlock blake
-  // unsigned short data16bit = B10001000;
+  // uint16_t data16bit = B10101000; // forward and unlock blake
+  // uint16_t data16bit = B10001000;
   // return writeRegister(ADDR_MOTOR_CONTROL, data16bit);
   return writeRegister(ADDR_MOTOR_CONTROL, createMotorControl16bit(MOTOR_DIRECTOIN_FORWARD));
 }
 
-unsigned char BLVD20KM_asukiaaa::writeLock() {
+uint8_t BLVD20KM_asukiaaa::writeLock() {
 #ifdef DEBUG_PRINT
   Serial.println("lock");
 #endif
   return writeRegister(ADDR_MOTOR_CONTROL, createMotorControl16bit(MOTOR_DIRECTOIN_STOP, false));
 }
 
-unsigned char BLVD20KM_asukiaaa::writeStop() {
+uint8_t BLVD20KM_asukiaaa::writeStop() {
 #ifdef DEBUG_PRINT
   Serial.println("stop");
 #endif
   return writeRegister(ADDR_MOTOR_CONTROL, createMotorControl16bit(MOTOR_DIRECTOIN_STOP));
 }
 
-unsigned char BLVD20KM_asukiaaa::writeReverse() {
+uint8_t BLVD20KM_asukiaaa::writeReverse() {
 #ifdef DEBUG_PRINT
   Serial.println("reverse");
 #endif
   return writeRegister(ADDR_MOTOR_CONTROL, createMotorControl16bit(MOTOR_DIRECTOIN_REVERSE));
 }
 
-unsigned char BLVD20KM_asukiaaa::writeSpeed(unsigned short speed) {
+uint8_t BLVD20KM_asukiaaa::writeSpeed(uint16_t speed) {
 #ifdef DEBUG_PRINT
   Serial.println("setSpeed " + String(speed));
 #endif
   return writeRegister(ADDR_SPEED0_L, speed);
 }
 
-unsigned char BLVD20KM_asukiaaa::writeDiagnosis() {
-  unsigned char result;
-  unsigned char data[41];
+uint8_t BLVD20KM_asukiaaa::writeDiagnosis() {
+  uint8_t result;
+  uint8_t data[41];
   data[0] = 0;
   data[1] = 0;
   data[2] = 1;
   data[3] = 2;
   writeQuery(FN_CODE_DIAGNOSIS, data, sizeof(data));
-  for (unsigned char i = 0; i < 41; ++i) {
+  for (uint8_t i = 0; i < 41; ++i) {
     data[i] = 0;
   }
   result = readQuery(FN_CODE_DIAGNOSIS, data, sizeof(data));
@@ -176,9 +176,9 @@ unsigned char BLVD20KM_asukiaaa::writeDiagnosis() {
   return 0;
 }
 
-unsigned char BLVD20KM_asukiaaa::readDirection(boolean *forwarding, boolean *reversing, boolean *freeLockOnStop) {
-  unsigned short data;
-  unsigned char result;
+uint8_t BLVD20KM_asukiaaa::readDirection(boolean *forwarding, boolean *reversing, boolean *freeLockOnStop) {
+  uint16_t data;
+  uint8_t result;
   result = readRegisters(ADDR_MOTOR_CONTROL, 1, &data);
   if (result != 0) {
     return result;
@@ -189,18 +189,18 @@ unsigned char BLVD20KM_asukiaaa::readDirection(boolean *forwarding, boolean *rev
   return 0;
 }
 
-unsigned short uCharsToUShort(unsigned char *chars) {
-  return ((unsigned short) chars[0]) << 8 | (unsigned short) chars[1];
+uint16_t uCharsToUShort(uint8_t *chars) {
+  return ((uint16_t) chars[0]) << 8 | (uint16_t) chars[1];
 }
 
-unsigned long uShortsToULong(unsigned short *shorts) {
-  return ((unsigned long) shorts[0]) << 16 | (unsigned long) shorts[1];
+uint32_t uShortsToULong(uint16_t *shorts) {
+  return ((uint32_t) shorts[0]) << 16 | (uint32_t) shorts[1];
 }
 
-unsigned char BLVD20KM_asukiaaa::readSpeed(unsigned short *speed) {
-  static const unsigned short dataLen = 2;
-  static unsigned short data[dataLen];
-  unsigned char result;
+uint8_t BLVD20KM_asukiaaa::readSpeed(uint16_t *speed) {
+  static const uint16_t dataLen = 2;
+  static uint16_t data[dataLen];
+  uint8_t result;
   result = readRegisters(ADDR_SPEED0_H, dataLen, data);
   if (result != 0) {
     return result;
@@ -209,8 +209,8 @@ unsigned char BLVD20KM_asukiaaa::readSpeed(unsigned short *speed) {
   return 0;
 }
 
-unsigned char BLVD20KM_asukiaaa::writeRegister(unsigned short writeAddress, unsigned short data16bit) {
-  unsigned char data[] = {
+uint8_t BLVD20KM_asukiaaa::writeRegister(uint16_t writeAddress, uint16_t data16bit) {
+  uint8_t data[] = {
     highByte(writeAddress),
     lowByte(writeAddress),
     highByte(data16bit),
@@ -220,33 +220,33 @@ unsigned char BLVD20KM_asukiaaa::writeRegister(unsigned short writeAddress, unsi
   return readQuery(FN_CODE_WRITE, data, sizeof(data));
 }
 
-unsigned char BLVD20KM_asukiaaa::readRegisters(unsigned short readStartAddress, unsigned short dataLen, unsigned short* registerData) {
-  unsigned char result;
-  unsigned char data[] = {
+uint8_t BLVD20KM_asukiaaa::readRegisters(uint16_t readStartAddress, uint16_t dataLen, uint16_t* registerData) {
+  uint8_t result;
+  uint8_t data[] = {
     highByte(readStartAddress),
     lowByte(readStartAddress),
     highByte(dataLen),
     lowByte(dataLen)
   };
   writeQuery(FN_CODE_READ, data, sizeof(data));
-  static unsigned char rData[41];
+  static uint8_t rData[41];
   result = readQuery(FN_CODE_READ, rData, dataLen * 2 + 1);
   if (result != 0) { return result; }
   // Serial.println("");
   // Serial.println(rDataLen);
   // Serial.println(data16bitLen * 2 + 1);
-  for (unsigned short i = 0; i < dataLen; ++i) {
+  for (uint16_t i = 0; i < dataLen; ++i) {
     registerData[i] = uCharsToUShort(&rData[i * 2 + 1]); // + 1 to skip data length byte
   }
   return 0;
 }
 
-void BLVD20KM_asukiaaa::writeQuery(unsigned char fnCode, unsigned char* data, unsigned int dataLen) {
+void BLVD20KM_asukiaaa::writeQuery(uint8_t fnCode, uint8_t* data, uint16_t dataLen) {
   digitalWrite(dePin, HIGH);
   digitalWrite(rePin, HIGH);
   delay(10);
-  unsigned int queryLen = 4 + dataLen;
-  unsigned int i;
+  uint16_t queryLen = 4 + dataLen;
+  uint16_t i;
   queryBuffer[0] = address;
   queryBuffer[1] = fnCode;
   for (i = 0; i < dataLen; ++i) {
@@ -261,7 +261,7 @@ void BLVD20KM_asukiaaa::writeQuery(unsigned char fnCode, unsigned char* data, un
   // queryBuffer[4] = 0x12;
   // queryBuffer[5] = 0x34;
 
-  unsigned short crc16 = getCRC16(queryBuffer, queryLen - 2);
+  uint16_t crc16 = getCRC16(queryBuffer, queryLen - 2);
   // Serial.print("crc16: ");
   // Serial.println(crc16, HEX);
   queryBuffer[queryLen - 2] = lowByte(crc16);
@@ -299,8 +299,8 @@ void BLVD20KM_asukiaaa::writeQuery(unsigned char fnCode, unsigned char* data, un
   delay(10);
 }
 
-unsigned char BLVD20KM_asukiaaa::readQuery(unsigned char fnCode, unsigned char* data, unsigned short dataLen) {
-  unsigned short queryLen = 0;
+uint8_t BLVD20KM_asukiaaa::readQuery(uint8_t fnCode, uint8_t* data, uint16_t dataLen) {
+  uint16_t queryLen = 0;
   unsigned long waitFrom = millis();
   const unsigned long timeoutMs = 20;
 #ifdef DEBUG_PRINT
@@ -332,7 +332,7 @@ unsigned char BLVD20KM_asukiaaa::readQuery(unsigned char fnCode, unsigned char* 
     return BLVD20KM_ERROR_NO_RESPONSE;
   }
 
-  unsigned short crc = getCRC16(queryBuffer, queryLen - 2);
+  uint16_t crc = getCRC16(queryBuffer, queryLen - 2);
   if (highByte(crc) != queryBuffer[queryLen - 1] || lowByte(crc) != queryBuffer[queryLen - 2]) {
     return BLVD20KM_ERROR_UNMATCH_CRC;
   }
@@ -351,7 +351,7 @@ unsigned char BLVD20KM_asukiaaa::readQuery(unsigned char fnCode, unsigned char* 
     return BLVD20KM_ERROR_UNMATCH_DATA_LEN;
   }
 
-  for (unsigned short i = 0; i < dataLen; ++i) {
+  for (uint16_t i = 0; i < dataLen; ++i) {
     data[i] = queryBuffer[i + 2];
   }
   return 0;

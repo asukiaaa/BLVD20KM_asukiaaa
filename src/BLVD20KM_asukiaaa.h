@@ -24,36 +24,36 @@
 
 class BLVD20KM_asukiaaa {
  public:
-  BLVD20KM_asukiaaa(HardwareSerial* serial, unsigned char address, unsigned char dePin, unsigned char rePin);
+  BLVD20KM_asukiaaa(HardwareSerial* serial, uint8_t address, uint8_t dePin, uint8_t rePin);
 // #ifndef __arm__
-//   BLVD20KM_asukiaaa(SoftwareSerial* serial, unsigned char address, unsigned char dePin, unsigned char rePin);
+//   BLVD20KM_asukiaaa(SoftwareSerial* serial, uint8_t address, uint8_t dePin, uint8_t rePin);
 // #endif
 
   void begin();
 
-  unsigned char writeForward();
-  unsigned char writeLock();
-  unsigned char writeStop();
-  unsigned char writeReverse();
+  uint8_t writeForward();
+  uint8_t writeLock();
+  uint8_t writeStop();
+  uint8_t writeReverse();
 
-  unsigned char writeDiagnosis();
-  unsigned char readSpeed(unsigned short *speed);
-  unsigned char readSpeedControlMode(unsigned short *mode);
-  unsigned char readDirection(boolean *forwarding, boolean *reversing, boolean *freeLockOnStop);
-  unsigned char writeSpeed(unsigned short speed);
-  unsigned char writeSpeedControlMode(unsigned short mode);
+  uint8_t writeDiagnosis();
+  uint8_t readSpeed(uint16_t *speed);
+  uint8_t readSpeedControlMode(uint16_t *mode);
+  uint8_t readDirection(boolean *forwarding, boolean *reversing, boolean *freeLockOnStop);
+  uint8_t writeSpeed(uint16_t speed);
+  uint8_t writeSpeedControlMode(uint16_t mode);
 
  private:
   HardwareSerial* serial;
-  unsigned char address;
-  unsigned char dePin;
-  unsigned char rePin;
-  unsigned char queryBuffer[BLVD20KM_QUERY_MAX_LEN];
-  unsigned char readQuery(unsigned char fnCode, unsigned char* data, unsigned short dataLen);
-  unsigned char readRegisters(unsigned short readStartAddress, unsigned short dataLen, unsigned short* registerData);
-  unsigned char writeConfigTrigger();
-  unsigned char writeRegister(unsigned short writeAddress, unsigned short data16bit);
-  void writeQuery(unsigned char fnCode, unsigned char* data, unsigned int dataLen);
+  uint8_t address;
+  uint8_t dePin;
+  uint8_t rePin;
+  uint8_t queryBuffer[BLVD20KM_QUERY_MAX_LEN];
+  uint8_t readQuery(uint8_t fnCode, uint8_t* data, uint16_t dataLen);
+  uint8_t readRegisters(uint16_t readStartAddress, uint16_t dataLen, uint16_t* registerData);
+  uint8_t writeConfigTrigger();
+  uint8_t writeRegister(uint16_t writeAddress, uint16_t data16bit);
+  void writeQuery(uint8_t fnCode, uint8_t* data, uint16_t dataLen);
 };
 
 #endif

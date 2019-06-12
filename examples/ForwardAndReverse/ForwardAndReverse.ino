@@ -5,7 +5,7 @@
 
 BLVD20KM_asukiaaa motor(&Serial1, 0, RS485_DE, RS485_RE);
 
-unsigned short speed;
+uint16_t speed;
 
 void setup() {
   Serial.begin(115200);
