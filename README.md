@@ -76,7 +76,7 @@ MIT
 
 # References
 
-- [BLVD20KM 取扱説明書検索](https://www.orientalmotor.co.jp/download/manual_search.action?productName=BLVD20KM&searchPattern=1&gengoId=1)
+- BLVD20KM manual list [ja](https://www.orientalmotor.co.jp/download/manual_search.action?productName=BLVD20KM&searchPattern=1&gengoId=1) [en](https://www.orientalmotor.co.jp/download/manual_search.action?productName=BLVD20KM&searchPattern=1&gengoId=2&x=22&y=17)
 - [BLVD20KM](https://www.orientalmotor.co.jp/products/detail.action?hinmei=BLVD20KM)
 - [ArduinoでRS-485に対応する](https://www.denshi.club/cookbook/wire/rs-4852-arduinors-485.html)
 - [CRC16を計算する](http://www.soramimi.jp/crc16/)
