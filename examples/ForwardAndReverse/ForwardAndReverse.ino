@@ -6,7 +6,7 @@
 
 BLVD20KM_asukiaaa motor(&Serial1, MOTOR_ADDRESS, RS485_DE, RS485_RE);
 
-uint16_t speed;
+uint16_t speed, alarmState;
 
 void setup() {
   Serial.begin(115200);
@@ -40,5 +40,10 @@ void loop() {
   delay(1000);
 
   motor.writeStop();
+  if (motor.readAlarm(&alarmState) == 0) {
+    Serial.println("Current alarm: " + String(alarmState));
+  } else {
+    Serial.println("Cannot read alarm");
+  }
   delay(1000);
 }

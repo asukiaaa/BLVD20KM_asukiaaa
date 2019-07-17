@@ -68,7 +68,7 @@ I checked connection with using [SparkFun Transceiver Breakout - RS-485](https:/
 
 ## Software
 
-See [example project](./examples).
+See [example project](./examples) and [header file](./src/BLVD02KM_asukiaaa.h).
 
 # License
 

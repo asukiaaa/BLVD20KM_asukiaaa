@@ -36,12 +36,15 @@ class BLVD20KM_asukiaaa {
   uint8_t writeStop();
   uint8_t writeReverse();
 
-  uint8_t writeDiagnosis();
   uint8_t readSpeed(uint16_t *speed);
   uint8_t readSpeedControlMode(uint16_t *mode);
   uint8_t readDirection(boolean *forwarding, boolean *reversing, boolean *freeLockOnStop);
   uint8_t writeSpeed(uint16_t speed);
   uint8_t writeSpeedControlMode(uint16_t mode);
+
+  uint8_t writeDiagnosis();
+  uint8_t readAlarm(uint16_t *alarm);
+  uint8_t writeResetAlarm();
 
  private:
   HardwareSerial* serial;

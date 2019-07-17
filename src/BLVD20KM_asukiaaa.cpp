@@ -5,6 +5,10 @@
 #define FN_CODE_DIAGNOSIS   0x08
 #define FN_CODE_WRITE_MULTI 0x10
 
+#define ADDR_ALARM_H       0x0080
+#define ADDR_ALARM_L       0x0081
+#define ADDR_RESET_ALARM_H 0x0180
+#define ADDR_RESET_ALARM_L 0x0181
 #define ADDR_SPEED0_H      0x0480
 #define ADDR_SPEED0_L      0x0481
 #define ADDR_MOTOR_CONTROL 0x007d
@@ -172,6 +176,21 @@ uint8_t BLVD20KM_asukiaaa::writeDiagnosis() {
   }
 
   return 0;
+}
+
+uint8_t BLVD20KM_asukiaaa::writeResetAlarm() {
+#ifdef DEBUG_PRINT
+  Serial.println("reset alarm");
+#endif
+  return writeRegister(ADDR_RESET_ALARM_L, 1);
+}
+
+
+uint8_t BLVD20KM_asukiaaa::readAlarm(uint16_t *alarm) {
+#ifdef DEBUG_PRINT
+  Serial.println("read alarm");
+#endif
+  return readRegisters(ADDR_ALARM_L, 1, alarm);
 }
 
 uint8_t BLVD20KM_asukiaaa::readDirection(boolean *forwarding, boolean *reversing, boolean *freeLockOnStop) {
