@@ -5,8 +5,6 @@
 #define FN_CODE_DIAGNOSIS   0x08
 #define FN_CODE_WRITE_MULTI 0x10
 
-#define BAUDRATE 115200 // depends on SW2:[1-3]
-
 #define ADDR_SPEED0_H      0x0480
 #define ADDR_SPEED0_L      0x0481
 #define ADDR_MOTOR_CONTROL 0x007d
@@ -66,8 +64,8 @@ BLVD20KM_asukiaaa::BLVD20KM_asukiaaa(HardwareSerial* serial, uint8_t address, ui
 // }
 // #endif
 
-void BLVD20KM_asukiaaa::begin() {
-  serial->begin(BAUDRATE, SERIAL_8E1);
+void BLVD20KM_asukiaaa::begin(int baudrate) {
+  serial->begin(baudrate, SERIAL_8E1);
   pinMode(dePin, OUTPUT);
   pinMode(rePin, OUTPUT);
   digitalWrite(dePin, LOW);

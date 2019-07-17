@@ -10,7 +10,7 @@ uint16_t speed;
 
 void setup() {
   Serial.begin(115200);
-  motor.begin();
+  motor.begin(115200);
 }
 
 void readAndPrintSpeed() {

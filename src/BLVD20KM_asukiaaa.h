@@ -29,7 +29,7 @@ class BLVD20KM_asukiaaa {
 //   BLVD20KM_asukiaaa(SoftwareSerial* serial, uint8_t address, uint8_t dePin, uint8_t rePin);
 // #endif
 
-  void begin();
+  void begin(int baudrate);
 
   uint8_t writeForward();
   uint8_t writeLock();
