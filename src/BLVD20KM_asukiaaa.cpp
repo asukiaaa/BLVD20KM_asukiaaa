@@ -261,7 +261,7 @@ uint8_t BLVD20KM_asukiaaa::readRegisters(uint16_t readStartAddress, uint16_t dat
 void BLVD20KM_asukiaaa::writeQuery(uint8_t fnCode, uint8_t* data, uint16_t dataLen) {
   digitalWrite(dePin, HIGH);
   digitalWrite(rePin, HIGH);
-  delay(10);
+  delay(1);
   uint16_t queryLen = 4 + dataLen;
   uint16_t i;
   queryBuffer[0] = address;
@@ -310,10 +310,10 @@ void BLVD20KM_asukiaaa::writeQuery(uint8_t fnCode, uint8_t* data, uint16_t dataL
 #ifdef DEBUG_PRINT
   Serial.println("");
 #endif
-  delayMicroseconds(500);
+  delay(1);
   digitalWrite(dePin, LOW);
   digitalWrite(rePin, LOW);
-  delay(10);
+  delay(1);
 }
 
 uint8_t BLVD20KM_asukiaaa::readQuery(uint8_t fnCode, uint8_t* data, uint16_t dataLen) {
@@ -325,7 +325,7 @@ uint8_t BLVD20KM_asukiaaa::readQuery(uint8_t fnCode, uint8_t* data, uint16_t dat
 #endif
   while (serial->available() || millis() - waitFrom < timeoutMs) {
     if (!serial->available()) {
-      delay(2);
+      delay(1);
       continue;
     }
     waitFrom = millis();
