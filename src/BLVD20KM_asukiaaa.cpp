@@ -5,16 +5,20 @@
 #define FN_CODE_DIAGNOSIS   0x08
 #define FN_CODE_WRITE_MULTI 0x10
 
-#define ADDR_ALARM_H       0x0080
-#define ADDR_ALARM_L       0x0081
-#define ADDR_RESET_ALARM_H 0x0180
-#define ADDR_RESET_ALARM_L 0x0181
-#define ADDR_SPEED0_H      0x0480
-#define ADDR_SPEED0_L      0x0481
-#define ADDR_MOTOR_CONTROL 0x007d
-#define ADDR_ANALOG_MODE_L 0x10e3
-#define ADDR_CONFIG_H      0x018c
-#define ADDR_CONFIG_L      0x018d
+#define ADDR_ALARM_H         0x0080
+#define ADDR_ALARM_L         0x0081
+#define ADDR_RESET_ALARM_H   0x0180
+#define ADDR_RESET_ALARM_L   0x0181
+#define ADDR_SPEED0_H        0x0480
+#define ADDR_SPEED0_L        0x0481
+#define ADDR_TORQUE_H        0x0700
+#define ADDR_TORQUE_L        0x0701
+#define ADDR_TORQUE_LIMIT0_H 0x0700
+#define ADDR_TORQUE_LIMIT0_L 0x0701
+#define ADDR_MOTOR_CONTROL   0x007d
+#define ADDR_ANALOG_MODE_L   0x10e3
+#define ADDR_CONFIG_H        0x018c
+#define ADDR_CONFIG_L        0x018d
 #define MOTOR_DIRECTOIN_STOP    0
 #define MOTOR_DIRECTOIN_FORWARD 1
 #define MOTOR_DIRECTOIN_REVERSE 2
@@ -153,9 +157,16 @@ uint8_t BLVD20KM_asukiaaa::writeReverse() {
 
 uint8_t BLVD20KM_asukiaaa::writeSpeed(uint16_t speed) {
 #ifdef DEBUG_PRINT
-  Serial.println("setSpeed " + String(speed));
+  Serial.println("writeSpeed " + String(speed));
 #endif
   return writeRegister(ADDR_SPEED0_L, speed);
+}
+
+uint8_t BLVD20KM_asukiaaa::writeTorqueLimit(uint16_t torque) {
+#ifdef DEBUG_PRINT
+  Serial.println("writeTorque " + String(torque));
+#endif
+  return writeRegister(ADDR_TORQUE_L, torque);
 }
 
 uint8_t BLVD20KM_asukiaaa::writeDiagnosis() {
@@ -206,24 +217,34 @@ uint8_t BLVD20KM_asukiaaa::readDirection(boolean *forwarding, boolean *reversing
   return 0;
 }
 
-uint16_t uCharsToUShort(uint8_t *chars) {
+uint16_t uint8tsToUint16t(uint8_t *chars) {
   return ((uint16_t) chars[0]) << 8 | (uint16_t) chars[1];
 }
 
-uint32_t uShortsToULong(uint16_t *shorts) {
+uint32_t uint16tsToUint32t(uint16_t *shorts) {
   return ((uint32_t) shorts[0]) << 16 | (uint32_t) shorts[1];
 }
 
-uint8_t BLVD20KM_asukiaaa::readSpeed(uint16_t *speed) {
-  static const uint16_t dataLen = 2;
-  static uint16_t data[dataLen];
+uint8_t BLVD20KM_asukiaaa::readUint32t(uint16_t readStartAddress, uint32_t *value) {
   uint8_t result;
-  result = readRegisters(ADDR_SPEED0_H, dataLen, data);
+  result = readRegisters(readStartAddress, 2, uint16Buffer);
   if (result != 0) {
     return result;
   }
-  *speed = uShortsToULong(data);
+  *value = uint16tsToUint32t(uint16Buffer);
   return 0;
+}
+
+uint8_t BLVD20KM_asukiaaa::readTorque(uint16_t *torque) {
+  return readRegisters(ADDR_TORQUE_L, 1, torque);
+}
+
+uint8_t BLVD20KM_asukiaaa::readTorqueLimit(uint16_t *torque) {
+  return readRegisters(ADDR_TORQUE_LIMIT0_L, 1, torque);
+}
+
+uint8_t BLVD20KM_asukiaaa::readSpeed(uint16_t *speed) {
+  return readRegisters(ADDR_SPEED0_L, 1, speed);
 }
 
 uint8_t BLVD20KM_asukiaaa::writeRegister(uint16_t writeAddress, uint16_t data16bit) {
@@ -246,14 +267,13 @@ uint8_t BLVD20KM_asukiaaa::readRegisters(uint16_t readStartAddress, uint16_t dat
     lowByte(dataLen)
   };
   writeQuery(FN_CODE_READ, data, sizeof(data));
-  static uint8_t rData[41];
-  result = readQuery(FN_CODE_READ, rData, dataLen * 2 + 1);
+  result = readQuery(FN_CODE_READ, uint8Buffer, dataLen * 2 + 1);
   if (result != 0) { return result; }
   // Serial.println("");
   // Serial.println(rDataLen);
   // Serial.println(data16bitLen * 2 + 1);
   for (uint16_t i = 0; i < dataLen; ++i) {
-    registerData[i] = uCharsToUShort(&rData[i * 2 + 1]); // + 1 to skip data length byte
+    registerData[i] = uint8tsToUint16t(&uint8Buffer[i * 2 + 1]); // + 1 to skip data length byte
   }
   return 0;
 }
