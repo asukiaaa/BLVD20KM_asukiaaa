@@ -98,6 +98,8 @@ uint8_t BLVD20KM_asukiaaa::readSpeedControlMode(uint16_t *mode) {
 }
 
 uint8_t BLVD20KM_asukiaaa::writeConfigTrigger() {
+  uint8_t result = writeStop();
+  if (result != 0) return result;
   return writeRegister(ADDR_CONFIG_L, 1);
 }
 
