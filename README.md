@@ -51,7 +51,7 @@ No | Role
 7  | NC
 8  | NC
 
-### Arduino <-> Uart to RS485S Transceiver <-> BLVD20KM
+### Arduino <-> Uart to RS485 Transceiver <-> BLVD20KM
 
 Arduino | Uart to RS485 | BLVD20KM
 --------|--------|------
