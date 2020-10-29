@@ -2,6 +2,7 @@
 #define BLVD20KM_H
 #include <Arduino.h>
 #include <HardwareSerial.h>
+#include <rs485_asukiaaa.h>
 
 #define BLVD20KM_QUERY_MAX_LEN 41
 
@@ -26,11 +27,7 @@
 class BLVD20KM_asukiaaa {
  public:
   BLVD20KM_asukiaaa(HardwareSerial* serial, uint8_t address, uint8_t dePin, uint8_t rePin);
-// #ifndef __arm__
-//   BLVD20KM_asukiaaa(SoftwareSerial* serial, uint8_t address, uint8_t dePin, uint8_t rePin);
-// #endif
-
-  void begin(int baudrate);
+  void begin(int baudrate, int config = SERIAL_8E1);
 
   uint8_t writeForward();
   uint8_t writeLock();
@@ -51,10 +48,10 @@ class BLVD20KM_asukiaaa {
   uint8_t writeResetAlarm();
 
  private:
-  HardwareSerial* serial;
+  rs485_asukiaaa::ModbusRtu::Central modbus;
   uint8_t address;
-  uint8_t dePin;
-  uint8_t rePin;
+  // uint8_t dePin;
+  // uint8_t rePin;
   uint8_t queryBuffer[BLVD20KM_QUERY_MAX_LEN];
   uint8_t readUint32t(uint16_t readStartAddress, uint32_t *value);
   uint8_t readQuery(uint8_t fnCode, uint8_t* data, uint16_t dataLen);
