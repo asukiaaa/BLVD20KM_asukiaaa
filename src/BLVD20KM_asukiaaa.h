@@ -35,8 +35,11 @@ class BLVD20KM_asukiaaa {
   uint8_t writeStop();
   uint8_t writeReverse();
 
+  uint8_t readCommandSpeed(int32_t *speed);
   uint8_t readDirection(boolean *forwarding, boolean *reversing,
                         boolean *freeLockOnStop);
+  uint8_t readFeedbackSpeed(int32_t *speed);
+  uint8_t readLoadTorque(uint16_t *speed);
   uint8_t readSpeed(uint16_t *speed);
   uint8_t readSpeedControlMode(uint16_t *mode);
   uint8_t readTorque(uint16_t *torque);
@@ -55,6 +58,7 @@ class BLVD20KM_asukiaaa {
   // uint8_t dePin;
   // uint8_t rePin;
   uint8_t queryBuffer[BLVD20KM_QUERY_MAX_LEN];
+  uint8_t readInt32t(uint16_t readStartAddress, int32_t *value);
   uint8_t readUint32t(uint16_t readStartAddress, uint32_t *value);
   uint8_t readQuery(uint8_t fnCode, uint8_t *data, uint16_t dataLen);
   uint8_t readRegisters(uint16_t readStartAddress, uint16_t dataLen,

@@ -7,6 +7,12 @@
 
 #define ADDR_ALARM_H 0x0080
 #define ADDR_ALARM_L 0x0081
+#define ADDR_COMMAND_SPEED_H 0x00c8
+#define ADDR_COMMAND_SPEED_L 0x00c9
+#define ADDR_FEEDBACK_SPEED_H 0x00ce
+#define ADDR_FEEDBACK_SPEED_L 0x00cf
+#define ADDR_LOAD_FACTOR_H 0x0108
+#define ADDR_LOAD_FACTOR_L 0x0109
 #define ADDR_RESET_ALARM_H 0x0180
 #define ADDR_RESET_ALARM_L 0x0181
 #define ADDR_SPEED0_H 0x0480
@@ -214,6 +220,17 @@ uint8_t BLVD20KM_asukiaaa::readUint32t(uint16_t readStartAddress,
   return 0;
 }
 
+uint8_t BLVD20KM_asukiaaa::readInt32t(uint16_t readStartAddress,
+                                      int32_t *value) {
+  uint32_t u32;
+  auto result = readUint32t(readStartAddress, &u32);
+  if (result != 0) {
+    return result;
+  }
+  memcpy(value, &u32, sizeof(u32));
+  return 0;
+}
+
 uint8_t BLVD20KM_asukiaaa::readTorque(uint16_t *torque) {
   return readRegisters(ADDR_TORQUE_L, 1, torque);
 }
@@ -224,6 +241,18 @@ uint8_t BLVD20KM_asukiaaa::readTorqueLimit(uint16_t *torque) {
 
 uint8_t BLVD20KM_asukiaaa::readSpeed(uint16_t *speed) {
   return readRegisters(ADDR_SPEED0_L, 1, speed);
+}
+
+uint8_t BLVD20KM_asukiaaa::readCommandSpeed(int32_t *speed) {
+  return readInt32t(ADDR_COMMAND_SPEED_H, speed);
+}
+
+uint8_t BLVD20KM_asukiaaa::readFeedbackSpeed(int32_t *speed) {
+  return readInt32t(ADDR_FEEDBACK_SPEED_H, speed);
+}
+
+uint8_t BLVD20KM_asukiaaa::readLoadTorque(uint16_t *torquePercent) {
+  return readRegisters(ADDR_LOAD_FACTOR_L, 1, torquePercent);
 }
 
 uint8_t BLVD20KM_asukiaaa::writeRegister(uint16_t writeAddress,
