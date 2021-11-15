@@ -34,7 +34,7 @@
 #define MOTOR_SLOW_CHANGE_BIT B00100000
 #define MOTOR_FREE_ON_STOP_BIT B10000000
 
-#define DEBUG_PRINT
+// #define DEBUG_PRINT
 
 BLVD20KM_asukiaaa::BLVD20KM_asukiaaa(HardwareSerial *serial, uint8_t address,
                                      uint8_t dePin, uint8_t rePin)
