@@ -3,7 +3,7 @@
 #include <Arduino.h>
 #include <HardwareSerial.h>
 
-#define BLVD20KM_ASUKIAAA_USE_RS485_ASUKIAAA
+// #define BLVD20KM_ASUKIAAA_USE_RS485_ASUKIAAA
 
 #ifdef BLVD20KM_ASUKIAAA_USE_RS485_ASUKIAAA
 #include <rs485_asukiaaa.h>
