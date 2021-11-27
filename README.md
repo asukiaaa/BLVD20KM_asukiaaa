@@ -36,6 +36,8 @@ OFF | OFF | ON  | 115200
 Switch 3 means address of motor driver.
 If you use multiple motor, set different address for each motors.
 
+Example project communicate with a driver which address is 1.
+
 ## Connection
 
 ### LAN cable pinout of motor driver
