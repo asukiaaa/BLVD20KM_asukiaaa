@@ -66,7 +66,7 @@ D2      | DE     | None
 VCC     | 5V     | None
 GND     | GND    | GND (LAN 2)
 
-I checked connection with using [SparkFun Transceiver Breakout - RS-485](https://www.sparkfun.com/products/10124).
+I checked connection with using some RS485 tranceiver. Ex: [SparkFun Transceiver Breakout - RS-485](https://www.sparkfun.com/products/10124), [sp3485-breakout](https://www.switch-science.com/catalog/6822/) or [sp3485-one-line-breakout](https://www.switch-science.com/catalog/6823/).
 
 ## Software
 
