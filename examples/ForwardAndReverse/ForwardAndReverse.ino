@@ -1,6 +1,7 @@
 #include <BLVD20KM_asukiaaa.h>
 
 #define RS485_DE 4
+// #define RS485_RE RS485_DE // you can unify DE and RE
 #define RS485_RE 5
 #define MOTOR_ADDRESS 1 // 0 for udp
 
