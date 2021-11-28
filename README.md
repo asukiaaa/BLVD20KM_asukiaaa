@@ -61,8 +61,8 @@ None    | A      | TR+ (LAN 3)
 None    | B      | TR- (LAN 6)
 TX1     | DI     | None
 RX1     | RO     | None
-D3      | RE     | None
-D2      | DE     | None
+D4      | RE     | None
+D5      | DE     | None
 VCC     | 5V     | None
 GND     | GND    | GND (LAN 2)
 
