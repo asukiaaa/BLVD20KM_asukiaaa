@@ -85,3 +85,4 @@ MIT
 - [BLVM64* (48V motors)](https://www.orientalmotor.co.jp/product_search/result.action?productName=BLVM64&searchPattern=1)
 - [ArduinoでRS-485に対応する](https://www.denshi.club/cookbook/wire/rs-4852-arduinors-485.html)
 - [CRC16を計算する](http://www.soramimi.jp/crc16/)
+- [SP3485 datasheet (PDF)](https://media.digikey.com/pdf/Data%20Sheets/MaxLinear%20PDFs/SP3481,85.pdf)
