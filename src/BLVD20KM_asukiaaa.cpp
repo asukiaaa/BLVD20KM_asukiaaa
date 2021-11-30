@@ -76,7 +76,7 @@ BLVD20KM_asukiaaa::BLVD20KM_asukiaaa(HardwareSerial *serial, uint8_t address,
 #endif
 }
 
-void BLVD20KM_asukiaaa::begin(int baudrate, int config) {
+void BLVD20KM_asukiaaa::begin(unsigned long baudrate, uint8_t config) {
 #ifdef BLVD20KM_ASUKIAAA_USE_RS485_ASUKIAAA
   modbus->begin(baudrate, config);
 #else
