@@ -7,18 +7,19 @@
 
 BLVD20KM_asukiaaa motor(&Serial1, MOTOR_ADDRESS, RS485_DE, RS485_RE);
 
-uint16_t speed, alarmState;
-
 void setup() {
   Serial.begin(115200);
   motor.begin(115200);
 }
 
 void readAndPrintSpeed() {
-  if (motor.readSpeed(&speed) == 0) {
+  uint16_t speed;
+  auto result = motor.readSpeed(&speed);
+  if (result == 0) {
     Serial.println("Speed is " + String(speed));
   } else {
-    Serial.println("Cannot read speed");
+    Serial.println("Cannot read speed. E:" + String(result) + " " +
+                   BLVD20KM_asukiaaa::getStrOfError(result));
   }
 }
 
@@ -41,10 +42,13 @@ void loop() {
   delay(1000);
 
   motor.writeStop();
-  if (motor.readAlarm(&alarmState) == 0) {
+  uint16_t alarmState;
+  auto result = motor.readAlarm(&alarmState);
+  if (result == 0) {
     Serial.println("Current alarm: " + String(alarmState));
   } else {
-    Serial.println("Cannot read alarm");
+    Serial.println("Cannot read alarm. E:" + String(result) + " " +
+                   BLVD20KM_asukiaaa::getStrOfError(result));
   }
   delay(1000);
 }
