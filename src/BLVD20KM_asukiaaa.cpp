@@ -1,9 +1,6 @@
 #include "BLVD20KM_asukiaaa.h"
 
-#define FN_CODE_READ 0x03
-#define FN_CODE_WRITE 0x06
 #define FN_CODE_DIAGNOSIS 0x08
-#define FN_CODE_WRITE_MULTI 0x10
 
 #define ADDR_ALARM_H 0x0080
 #define ADDR_ALARM_L 0x0081
@@ -35,57 +32,15 @@
 #define MOTOR_FREE_ON_STOP_BIT B10000000
 
 // #define DEBUG_PRINT
-// #define BLVD20KM_ASUKIAAA_USE_RS485_ASUKIAAA
-
-#ifndef BLVD20KM_ASUKIAAA_USE_RS485_ASUKIAAA
-uint16_t getCRC16(uint8_t const *buf, uint16_t len) {
-  // Serial.print("data len: ");
-  // Serial.println(len);
-  // for (uint16_t i = 0; i < len; ++i) {
-  //   Serial.print(ptr[(uint8_t) i], HEX);
-  //   Serial.print(" ");
-  //   if (i > 30) break;
-  // }
-  // Serial.println("");
-
-  uint16_t crc = 0xFFFF;
-  for (uint16_t pos = 0; pos < len; pos++) {
-    crc ^= (uint16_t)buf[pos];      // XOR byte into least sig. byte of crc
-    for (int i = 8; i != 0; i--) {  // Loop over each bit
-      if ((crc & 0x0001) != 0) {    // If the LSB is set
-        crc >>= 1;                  // Shift right and XOR 0xA001
-        crc ^= 0xA001;
-      } else        // Else LSB is not set
-        crc >>= 1;  // Just shift right
-    }
-  }
-
-  return crc;
-}
-#endif
 
 BLVD20KM_asukiaaa::BLVD20KM_asukiaaa(HardwareSerial *serial, uint8_t address,
                                      uint8_t dePin, uint8_t rePin) {
   this->address = address;
-#ifdef BLVD20KM_ASUKIAAA_USE_RS485_ASUKIAAA
   modbus = new rs485_asukiaaa::ModbusRtu::Central(serial, dePin, rePin);
-#else
-  this->serial = serial;
-  this->dePin = dePin;
-  this->rePin = rePin;
-#endif
 }
 
 void BLVD20KM_asukiaaa::begin(unsigned long baudrate, unsigned long config) {
-#ifdef BLVD20KM_ASUKIAAA_USE_RS485_ASUKIAAA
   modbus->begin(baudrate, config);
-#else
-  serial->begin(baudrate, config);
-  pinMode(dePin, OUTPUT);
-  pinMode(rePin, OUTPUT);
-  digitalWrite(dePin, LOW);
-  digitalWrite(rePin, LOW);
-#endif
   writeSpeedControlMode(BLVD02KM_SPEED_MODE_USE_DIGITALS);
   writeSpeed(BLVD20KM_SPEED_MIN);
   writeStop();
@@ -299,164 +254,33 @@ uint8_t BLVD20KM_asukiaaa::readLoadTorque(uint16_t *torquePercent) {
 
 uint8_t BLVD20KM_asukiaaa::writeRegister(uint16_t writeAddress,
                                          uint16_t data16bit) {
-#ifdef BLVD20KM_ASUKIAAA_USE_RS485_ASUKIAAA
-  return modbus->writeRegisterBy16t(address, writeAddress, data16bit);
-#else
-  uint8_t data[] = {highByte(writeAddress), lowByte(writeAddress),
-                    highByte(data16bit), lowByte(data16bit)};
-  writeQuery(FN_CODE_WRITE, data, sizeof(data));
-  return readQuery(FN_CODE_WRITE, data, sizeof(data));
-#endif
+  auto result = modbus->writeRegisterBy16t(address, writeAddress, data16bit);
+  delay(4);
+  return result;
 }
 
 uint8_t BLVD20KM_asukiaaa::readRegisters(uint16_t readStartAddress,
                                          uint16_t dataLen,
                                          uint16_t *registerData) {
-  uint8_t result;
-  uint8_t data[] = {highByte(readStartAddress), lowByte(readStartAddress),
-                    highByte(dataLen), lowByte(dataLen)};
-  writeQuery(FN_CODE_READ, data, sizeof(data));
-  result = readQuery(FN_CODE_READ, uint8Buffer, dataLen * 2 + 1);
-  if (result != 0) {
-    return result;
-  }
-  // Serial.println("");
-  // Serial.println(rDataLen);
-  // Serial.println(data16bitLen * 2 + 1);
-  for (uint16_t i = 0; i < dataLen; ++i) {
-    registerData[i] = uint8tsToUint16t(
-        &uint8Buffer[i * 2 + 1]);  // + 1 to skip data length byte
-  }
-  return 0;
+  auto result = modbus->readRegistersBy16t(address, readStartAddress,
+                                           registerData, dataLen);
+  delay(4);
+  return result;
 }
 
 void BLVD20KM_asukiaaa::writeQuery(uint8_t fnCode, uint8_t *data,
                                    uint16_t dataLen) {
-#ifdef BLVD20KM_ASUKIAAA_USE_RS485_ASUKIAAA
   modbus->writeQuery(address, fnCode, data, dataLen);
-#else
-  digitalWrite(dePin, HIGH);
-  digitalWrite(rePin, HIGH);
-  delay(1);
-  uint16_t queryLen = 4 + dataLen;
-  uint16_t i;
-  queryBuffer[0] = address;
-  queryBuffer[1] = fnCode;
-  for (i = 0; i < dataLen; ++i) {
-    queryBuffer[i + 2] = data[i];
-  }
-
-  // debug for address 3 device
-  // queryBuffer[0] = 0x03;
-  // queryBuffer[1] = 0x08;
-  // queryBuffer[2] = 0x00;
-  // queryBuffer[3] = 0x00;
-  // queryBuffer[4] = 0x12;
-  // queryBuffer[5] = 0x34;
-
-  uint16_t crc16 = getCRC16(queryBuffer, queryLen - 2);
-  // Serial.print("crc16: ");
-  // Serial.println(crc16, HEX);
-  queryBuffer[queryLen - 2] = lowByte(crc16);
-  queryBuffer[queryLen - 1] = highByte(crc16);
-
-  // debug for address 3 device
-  // queryBuffer[0] = 0x03;
-  // queryBuffer[1] = 0x08;
-  // queryBuffer[2] = 0x00;
-  // queryBuffer[3] = 0x00;
-  // queryBuffer[4] = 0x12;
-  // queryBuffer[5] = 0x34;
-  // queryBuffer[6] = 0xEC;
-  // queryBuffer[7] = 0x9E;
-  // queryLen = 8;
-
-  while (serial->available()) {
-    serial->read();
-  }  // remove received buffer before sending
-#ifdef DEBUG_PRINT
-  Serial.print("Send: ");
-#endif
-  for (i = 0; i < queryLen; ++i) {
-    serial->write(queryBuffer[i]);
-#ifdef DEBUG_PRINT
-    Serial.print(queryBuffer[i], HEX);
-    Serial.print(" ");
-#endif
-  }
-  serial->flush();
-#ifdef DEBUG_PRINT
-  Serial.println("");
-#endif
-  delay(1);
-  digitalWrite(dePin, LOW);
-  digitalWrite(rePin, LOW);
-  delay(1);
-#endif
 }
 
 uint8_t BLVD20KM_asukiaaa::readQuery(uint8_t fnCode, uint8_t *data,
                                      uint16_t dataLen) {
-#ifdef BLVD20KM_ASUKIAAA_USE_RS485_ASUKIAAA
   auto result = modbus->readQuery(address, fnCode, data, dataLen, 20UL);
   delay(4);
   return result;
-#else
-  uint16_t queryLen = 0;
-  unsigned long waitFrom = millis();
-  const unsigned long timeoutMs = 20;
-#ifdef DEBUG_PRINT
-  Serial.print("Receive: ");
-#endif
-  while (serial->available() || millis() - waitFrom < timeoutMs) {
-    if (!serial->available()) {
-      delay(1);
-      continue;
-    }
-    waitFrom = millis();
-    if (queryLen == BLVD20KM_QUERY_MAX_LEN) {
-#ifdef DEBUG_PRINT
-      Serial.println("stop receiving because buffer length was over");
-#endif
-      return BLVD20KM_ERROR_OVER_QUERY_MAX_LEN;
-    }
-    queryBuffer[queryLen] = serial->read();
-#ifdef DEBUG_PRINT
-    Serial.print(queryBuffer[queryLen], HEX);
-    Serial.print(" ");
-#endif
-    ++queryLen;
-  }
-#ifdef DEBUG_PRINT
-  Serial.println("");
-#endif
-  if (queryLen == 0) {
-    return BLVD20KM_ERROR_NO_RESPONSE;
-  }
+}
 
-  uint16_t crc = getCRC16(queryBuffer, queryLen - 2);
-  if (highByte(crc) != queryBuffer[queryLen - 1] ||
-      lowByte(crc) != queryBuffer[queryLen - 2]) {
-    return BLVD20KM_ERROR_UNMATCH_CRC;
-  }
-  if (queryBuffer[0] != address) {
-    return BLVD20KM_ERROR_UNMATCH_ADDRESS;
-  }
-  if (queryBuffer[1] != fnCode) {
-    if (queryBuffer[1] == (fnCode + 0x80)) {
-      return queryBuffer[2];  // ERROR_CODE
-    } else {
-      return BLVD20KM_ERROR_UNMATCH_FN_CODE;
-    }
-  }
-
-  if (dataLen != queryLen - 4) {
-    return BLVD20KM_ERROR_UNMATCH_DATA_LEN;
-  }
-
-  for (uint16_t i = 0; i < dataLen; ++i) {
-    data[i] = queryBuffer[i + 2];
-  }
-  return 0;
-#endif
+String BLVD20KM_asukiaaa::getStrOfError(uint8_t error) {
+  return rs485_asukiaaa::ModbusRtu::getStrOfError(
+      (rs485_asukiaaa::ModbusRtu::Error)error);
 }

@@ -2,25 +2,8 @@
 #define BLVD20KM_H
 #include <Arduino.h>
 #include <HardwareSerial.h>
-
-// #define BLVD20KM_ASUKIAAA_USE_RS485_ASUKIAAA
-
-#ifdef BLVD20KM_ASUKIAAA_USE_RS485_ASUKIAAA
 #include <rs485_asukiaaa.h>
-#else
-#define BLVD20KM_QUERY_MAX_LEN 41
-#endif
 
-#define BLVD20KM_ERROR_CODE_INVALID_FN 0x01
-#define BLVD20KM_ERROR_CODE_INVALID_ADDR 0x02
-#define BLVD20KM_ERROR_CODE_INVALID_DATA 0x03
-#define BLVD20KM_ERROR_CODE_SLAVE_ERROR 0x04
-#define BLVD20KM_ERROR_NO_RESPONSE 0x10
-#define BLVD20KM_ERROR_UNMATCH_CRC 0x11
-#define BLVD20KM_ERROR_UNMATCH_ADDRESS 0x12
-#define BLVD20KM_ERROR_UNMATCH_FN_CODE 0x13
-#define BLVD20KM_ERROR_UNMATCH_DATA_LEN 0x14
-#define BLVD20KM_ERROR_OVER_QUERY_MAX_LEN 0x15
 #define BLVD20KM_ERROR_DIAGNOSIS_DATA_INVALID 0x16
 
 #define BLVD20KM_SPEED_MIN 80
@@ -57,15 +40,10 @@ class BLVD20KM_asukiaaa {
   uint8_t readAlarm(uint16_t *alarm);
   uint8_t writeResetAlarm();
 
+  static String getStrOfError(uint8_t error);
+
  private:
-#ifdef BLVD20KM_ASUKIAAA_USE_RS485_ASUKIAAA
-  rs485_asukiaaa::ModbusRtu::Central* modbus;
-#else
-  HardwareSerial* serial;
-  uint8_t dePin;
-  uint8_t rePin;
-  uint8_t queryBuffer[BLVD20KM_QUERY_MAX_LEN];
-#endif
+  rs485_asukiaaa::ModbusRtu::Central *modbus;
   uint8_t address;
   uint8_t readInt32t(uint16_t readStartAddress, int32_t *value);
   uint8_t readUint32t(uint16_t readStartAddress, uint32_t *value);
