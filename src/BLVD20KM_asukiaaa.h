@@ -33,7 +33,7 @@ class BLVD20KM_asukiaaa {
  public:
   BLVD20KM_asukiaaa(HardwareSerial *serial, uint8_t address, uint8_t dePin,
                     uint8_t rePin);
-  void begin(unsigned long baudrate, uint8_t config = SERIAL_8E1);
+  void begin(unsigned long baudrate, unsigned long config = SERIAL_8E1);
 
   uint8_t writeForward();
   uint8_t writeLock();
