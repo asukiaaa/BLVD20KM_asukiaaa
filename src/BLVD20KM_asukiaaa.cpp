@@ -398,7 +398,9 @@ void BLVD20KM_asukiaaa::writeQuery(uint8_t fnCode, uint8_t *data,
 uint8_t BLVD20KM_asukiaaa::readQuery(uint8_t fnCode, uint8_t *data,
                                      uint16_t dataLen) {
 #ifdef BLVD20KM_ASUKIAAA_USE_RS485_ASUKIAAA
-  return modbus->readQuery(address, fnCode, data, dataLen);
+  auto result = modbus->readQuery(address, fnCode, data, dataLen, 20UL);
+  delay(4);
+  return result;
 #else
   uint16_t queryLen = 0;
   unsigned long waitFrom = millis();
