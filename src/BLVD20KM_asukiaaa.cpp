@@ -34,13 +34,28 @@
 // #define DEBUG_PRINT
 
 BLVD20KM_asukiaaa::BLVD20KM_asukiaaa(HardwareSerial *serial, uint8_t address,
-                                     uint8_t dePin, uint8_t rePin) {
+                                     uint8_t dePin, uint8_t rePin)
+    : createdModbus(true) {
   this->address = address;
   modbus = new rs485_asukiaaa::ModbusRtu::Central(serial, dePin, rePin);
 }
 
+BLVD20KM_asukiaaa::BLVD20KM_asukiaaa(rs485_asukiaaa::ModbusRtu::Central *modbus,
+                                     uint8_t address)
+    : createdModbus(false) {
+  this->address = address;
+  this->modbus = modbus;
+}
+
+BLVD20KM_asukiaaa::~BLVD20KM_asukiaaa() {
+  if (createdModbus) {
+    delete modbus;
+  }
+}
+
 void BLVD20KM_asukiaaa::begin(unsigned long baudrate, unsigned long config) {
   modbus->begin(baudrate, config);
+  modbus->msSilentInterval = baudrate <= 9600 ? 6 : 4;
   writeSpeedControlMode(BLVD02KM_SPEED_MODE_USE_DIGITALS);
   writeSpeed(BLVD20KM_SPEED_MIN);
   writeStop();
@@ -254,18 +269,14 @@ uint8_t BLVD20KM_asukiaaa::readLoadTorque(uint16_t *torquePercent) {
 
 uint8_t BLVD20KM_asukiaaa::writeRegister(uint16_t writeAddress,
                                          uint16_t data16bit) {
-  auto result = modbus->writeRegisterBy16t(address, writeAddress, data16bit);
-  delay(msSilentInterval);
-  return result;
+  return modbus->writeRegisterBy16t(address, writeAddress, data16bit);
 }
 
 uint8_t BLVD20KM_asukiaaa::readRegisters(uint16_t readStartAddress,
                                          uint16_t dataLen,
                                          uint16_t *registerData) {
-  auto result = modbus->readRegistersBy16t(address, readStartAddress,
-                                           registerData, dataLen);
-  delay(msSilentInterval);
-  return result;
+  return modbus->readRegistersBy16t(address, readStartAddress, registerData,
+                                    dataLen);
 }
 
 void BLVD20KM_asukiaaa::writeQuery(uint8_t fnCode, uint8_t *data,
@@ -275,9 +286,7 @@ void BLVD20KM_asukiaaa::writeQuery(uint8_t fnCode, uint8_t *data,
 
 uint8_t BLVD20KM_asukiaaa::readQuery(uint8_t fnCode, uint8_t *data,
                                      uint16_t dataLen) {
-  auto result = modbus->readQuery(address, fnCode, data, dataLen, 20UL);
-  delay(msSilentInterval);
-  return result;
+  return modbus->readQuery(address, fnCode, data, dataLen, 20UL);
 }
 
 String BLVD20KM_asukiaaa::getStrOfError(uint8_t error) {

@@ -16,6 +16,8 @@ class BLVD20KM_asukiaaa {
  public:
   BLVD20KM_asukiaaa(HardwareSerial *serial, uint8_t address, uint8_t dePin,
                     uint8_t rePin);
+  BLVD20KM_asukiaaa(rs485_asukiaaa::ModbusRtu::Central *modbus, uint8_t address);
+  ~BLVD20KM_asukiaaa();
   void begin(unsigned long baudrate, unsigned long config = SERIAL_8E1);
 
   uint8_t writeForward();
@@ -44,6 +46,7 @@ class BLVD20KM_asukiaaa {
 
  private:
   rs485_asukiaaa::ModbusRtu::Central *modbus;
+  const bool createdModbus;
   uint8_t address;
   uint8_t readInt32t(uint16_t readStartAddress, int32_t *value);
   uint8_t readUint32t(uint16_t readStartAddress, uint32_t *value);
@@ -54,7 +57,6 @@ class BLVD20KM_asukiaaa {
   uint8_t writeRegister(uint16_t writeAddress, uint16_t data16bit);
   void writeQuery(uint8_t fnCode, uint8_t *data, uint16_t dataLen);
 
-  unsigned long msSilentInterval = 4;
   uint16_t uint16Buffer[8];
   uint8_t uint8Buffer[41];
 };
