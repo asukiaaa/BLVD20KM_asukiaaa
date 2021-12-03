@@ -255,7 +255,7 @@ uint8_t BLVD20KM_asukiaaa::readLoadTorque(uint16_t *torquePercent) {
 uint8_t BLVD20KM_asukiaaa::writeRegister(uint16_t writeAddress,
                                          uint16_t data16bit) {
   auto result = modbus->writeRegisterBy16t(address, writeAddress, data16bit);
-  delay(4);
+  delay(msSilentInterval);
   return result;
 }
 
@@ -264,7 +264,7 @@ uint8_t BLVD20KM_asukiaaa::readRegisters(uint16_t readStartAddress,
                                          uint16_t *registerData) {
   auto result = modbus->readRegistersBy16t(address, readStartAddress,
                                            registerData, dataLen);
-  delay(4);
+  delay(msSilentInterval);
   return result;
 }
 
@@ -276,7 +276,7 @@ void BLVD20KM_asukiaaa::writeQuery(uint8_t fnCode, uint8_t *data,
 uint8_t BLVD20KM_asukiaaa::readQuery(uint8_t fnCode, uint8_t *data,
                                      uint16_t dataLen) {
   auto result = modbus->readQuery(address, fnCode, data, dataLen, 20UL);
-  delay(4);
+  delay(msSilentInterval);
   return result;
 }
 

@@ -54,6 +54,7 @@ class BLVD20KM_asukiaaa {
   uint8_t writeRegister(uint16_t writeAddress, uint16_t data16bit);
   void writeQuery(uint8_t fnCode, uint8_t *data, uint16_t dataLen);
 
+  unsigned long msSilentInterval = 4;
   uint16_t uint16Buffer[8];
   uint8_t uint8Buffer[41];
 };
