@@ -4,12 +4,13 @@
 // #define RS485_RE RS485_DE // you can unify DE and RE
 #define RS485_RE 5
 #define MOTOR_ADDRESS 1 // 0 for udp
+#define RS485_BAUDRATE 115200
 
 BLVD20KM_asukiaaa motor(&Serial1, MOTOR_ADDRESS, RS485_DE, RS485_RE);
 
 void setup() {
   Serial.begin(115200);
-  motor.begin(115200);
+  motor.begin(RS485_BAUDRATE);
 }
 
 void readAndPrintSpeed() {
