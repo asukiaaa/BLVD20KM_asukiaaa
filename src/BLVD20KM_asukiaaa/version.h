@@ -1,0 +1,34 @@
+#pragma once
+
+#define BLVD20KM_ASUKIAAA_VERSION_MAJOR 1
+#define BLVD20KM_ASUKIAAA_VERSION_MINOR 2
+#define BLVD20KM_ASUKIAAA_VERSION_PATCH 1
+
+/*
+#define STR(x) #x
+#define REQUIRED_RS485_ASUKIAAA_VERSION_MAJOR 1
+#define REQUIRED_RS485_ASUKIAAA_VERSION_MINOR 2
+#define REQUIRED_RS485_ASUKIAAA_VERSION_PATCH 2
+
+#define BUILD_LIB_VERSION_ERROR_MESSAGE(LIB_NAME, MAJOR, MINOR, PATCH) \
+  STR(LIB_NAME)                                                        \
+  " version " STR(MAJOR) "." STR(MINOR) "." STR(PATCH) " or more is required"
+
+#if !(RS485_ASUKIAAA_VERSION_MAJOR >=           \
+      REQUIRED_RS485_ASUKIAAA_VERSION_MAJOR) || \
+    !(RS485_ASUKIAAA_VERSION_MINOR >=           \
+      REQUIRED_RS485_ASUKIAAA_VERSION_MINOR) || \
+    !(RS485_ASUKIAAA_VERSION_PATCH >= REQUIRED_RS485_ASUKIAAA_VERSION_PATCH)
+#pragma message BUILD_LIB_VERSION_ERROR_MESSAGE(           \
+    rs485_asukiaaa, REQUIRED_RS485_ASUKIAAA_VERSION_MAJOR, \
+    REQUIRED_RS485_ASUKIAAA_VERSION_MINOR,                 \
+    REQUIRED_RS485_ASUKIAAA_VERSION_PATCH)
+#error rs485_asukiaaa version error
+#endif
+*/
+
+#if !(RS485_ASUKIAAA_VERSION_MAJOR >= 1) || \
+    !(RS485_ASUKIAAA_VERSION_MINOR >= 2) || \
+    !(RS485_ASUKIAAA_VERSION_PATCH >= 2)
+#error rs485_asukiaaa version 1.2.2 or more is required. Please install or update rs485_asukiaaa
+#endif
