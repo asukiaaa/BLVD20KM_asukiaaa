@@ -1,5 +1,5 @@
-#ifndef BLVD20KM_H
-#define BLVD20KM_H
+#pragma once
+
 #include <Arduino.h>
 #include <HardwareSerial.h>
 #include <rs485_asukiaaa.h>
@@ -116,5 +116,3 @@ class BLVD20KM_asukiaaa {
   uint16_t uint16Buffer[8];
   uint8_t uint8Buffer[41];
 };
-
-#endif
