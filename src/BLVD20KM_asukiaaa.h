@@ -45,9 +45,11 @@ class BLVD20KM_asukiaaa {
  public:
   BLVD20KM_asukiaaa(HardwareSerial *serial, uint8_t address, uint8_t dePin,
                     uint8_t rePin);
-  BLVD20KM_asukiaaa(rs485_asukiaaa::ModbusRtu::Central *modbus, uint8_t address);
+  BLVD20KM_asukiaaa(rs485_asukiaaa::ModbusRtu::Central *modbus,
+                    uint8_t address);
   ~BLVD20KM_asukiaaa();
   void begin(unsigned long baudrate, unsigned long config = SERIAL_8E1);
+  void beginWithoutModbus();
 
   uint8_t writeForward();
   uint8_t writeLock();
@@ -72,6 +74,9 @@ class BLVD20KM_asukiaaa {
   uint8_t writeResetAlarm();
 
   static String getStrOfError(uint8_t error);
+  static void beginModbus(rs485_asukiaaa::ModbusRtu::Central *modbus,
+                          unsigned long baudrate,
+                          unsigned long config = SERIAL_8E1);
 
  private:
   rs485_asukiaaa::ModbusRtu::Central *modbus;

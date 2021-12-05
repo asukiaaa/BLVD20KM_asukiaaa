@@ -54,14 +54,21 @@ BLVD20KM_asukiaaa::~BLVD20KM_asukiaaa() {
 }
 
 void BLVD20KM_asukiaaa::begin(unsigned long baudrate, unsigned long config) {
+  beginModbus(modbus, baudrate, config);
+  beginWithoutModbus();
+}
+
+void BLVD20KM_asukiaaa::beginModbus(rs485_asukiaaa::ModbusRtu::Central *modbus,
+                                    unsigned long baudrate,
+                                    unsigned long config) {
   modbus->begin(baudrate, config);
   modbus->msSilentInterval = baudrate <= 9600 ? 6 : 4;
+}
+
+void BLVD20KM_asukiaaa::beginWithoutModbus() {
   writeSpeedControlMode(BLVD02KM_SPEED_MODE_USE_DIGITALS);
   writeSpeed(BLVD20KM_SPEED_MIN);
   writeStop();
-#ifdef DEBUG_PRINT
-  Serial.println("end begin");
-#endif
 }
 
 uint8_t BLVD20KM_asukiaaa::writeSpeedControlMode(uint16_t mode) {
