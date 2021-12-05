@@ -49,8 +49,8 @@ void loop() {
   if (result == 0) {
     Serial.println("Current alarm: " + String(alarmState));
   } else {
-    Serial.println("Cannot read alarm. E:" + String(result) + " " +
-                   BLVD20KM_asukiaaa::getStrOfError(result));
+    Serial.println("Current alarm:0x" + String(alarmState, HEX) + " " +
+                   BLVD20KM_asukiaaa::getStrOfAlarm(alarmState));
   }
   delay(1000);
 }

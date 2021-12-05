@@ -41,6 +41,27 @@
 
 #define BLVD02KM_SPEED_MODE_USE_DIGITALS 0x0001
 
+enum class BLVD20KM_asukiaaa_Alarm : uint8_t {
+  None = 0,
+  Overload = 0x30,
+  SensorError = 0x28,
+  InitialSensorError = 0x42,
+  Overvoltage = 0x22,
+  Undervoltage = 0x25,
+  Overspeed = 0x31,
+  Overcurrent = 0x20,
+  EEPROMError = 0x41,
+  MainCicruitOverheat = 0x21,
+  ExternalStop = 0x6e,
+  PreventionOfOperationAtPowerOn = 0x46,
+  NetworkBusError = 0x81,
+  CommunicationSwitchSettingError = 0x83,
+  RS485CommunicationError = 0x84,
+  RS485CommunicationTimeout = 0x85,
+  NetworkConverterError = 0x8e,
+  MainCicruitOutputError = 0x2d,
+};
+
 class BLVD20KM_asukiaaa {
  public:
   BLVD20KM_asukiaaa(HardwareSerial *serial, uint8_t address, uint8_t dePin,
@@ -73,6 +94,7 @@ class BLVD20KM_asukiaaa {
   uint8_t readAlarm(uint16_t *alarm);
   uint8_t writeResetAlarm();
 
+  static String getStrOfAlarm(uint16_t alarm);
   static String getStrOfError(uint8_t error);
   static void beginModbus(rs485_asukiaaa::ModbusRtu::Central *modbus,
                           unsigned long baudrate,

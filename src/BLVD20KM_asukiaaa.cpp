@@ -300,3 +300,46 @@ String BLVD20KM_asukiaaa::getStrOfError(uint8_t error) {
   return rs485_asukiaaa::ModbusRtu::getStrOfError(
       (rs485_asukiaaa::ModbusRtu::Error)error);
 }
+
+String BLVD20KM_asukiaaa::getStrOfAlarm(uint16_t alarm) {
+  typedef BLVD20KM_asukiaaa_Alarm Alarm;
+  switch ((Alarm)alarm) {
+    case Alarm::CommunicationSwitchSettingError:
+      return "Communication switch setting error";
+    case Alarm::EEPROMError:
+      return "EEPROM error";
+    case Alarm::ExternalStop:
+      return "External stop";
+    case Alarm::InitialSensorError:
+      return "Internal sensor error";
+    case Alarm::MainCicruitOutputError:
+      return "Main circuit output error";
+    case Alarm::MainCicruitOverheat:
+      return "Main circuit overheat";
+    case Alarm::NetworkBusError:
+      return "Network bus error";
+    case Alarm::NetworkConverterError:
+      return "NetworkConvertError";
+    case Alarm::None:
+      return "None";
+    case Alarm::Overcurrent:
+      return "Overcurrent";
+    case Alarm::Overload:
+      return "Overload";
+    case Alarm::Overspeed:
+      return "Overspeed";
+    case Alarm::Overvoltage:
+      return "Overvoltage";
+    case Alarm::PreventionOfOperationAtPowerOn:
+      return "Prevention of operation at power on";
+    case Alarm::RS485CommunicationError:
+      return "RS485 communicaton error";
+    case Alarm::RS485CommunicationTimeout:
+      return "RS485 communication timeout";
+    case Alarm::SensorError:
+      return "Sensor error";
+    case Alarm::Undervoltage:
+      return "Undervoltage";
+  }
+  return "";
+}
