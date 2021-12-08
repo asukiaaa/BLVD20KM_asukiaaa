@@ -66,7 +66,7 @@ void BLVD20KM_asukiaaa::beginModbus(rs485_asukiaaa::ModbusRtu::Central *modbus,
 }
 
 void BLVD20KM_asukiaaa::beginWithoutModbus() {
-  writeSpeedControlMode(BLVD02KM_SPEED_MODE_USE_DIGITALS);
+  writeSpeedControlMode(BLVD20KM_SPEED_MODE_USE_DIGITALS);
   writeSpeed(BLVD20KM_SPEED_MIN);
   writeStop();
 }

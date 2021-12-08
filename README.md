@@ -70,7 +70,7 @@ I checked connection with using some RS485 tranceiver. Ex: [SparkFun Transceiver
 
 ## Software
 
-See [example project](./examples) and [header file](./src/BLVD02KM_asukiaaa.h).
+See [example project](./examples) and [header file](./src/BLVD20KM_asukiaaa.h).
 
 # License
 
