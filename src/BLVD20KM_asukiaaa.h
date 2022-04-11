@@ -71,6 +71,7 @@ class BLVD20KM_asukiaaa {
   static void beginModbus(rs485_asukiaaa::ModbusRtu::Central *modbus,
                           unsigned long baudrate,
                           unsigned long config = SERIAL_8E1);
+  static unsigned long getMsSilentInterval(unsigned long baudrate);
 
  private:
   rs485_asukiaaa::ModbusRtu::Central *modbus;

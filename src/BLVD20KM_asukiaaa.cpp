@@ -62,7 +62,11 @@ void BLVD20KM_asukiaaa::beginModbus(rs485_asukiaaa::ModbusRtu::Central *modbus,
                                     unsigned long baudrate,
                                     unsigned long config) {
   modbus->begin(baudrate, config);
-  modbus->msSilentInterval = baudrate <= 9600 ? 6 : 4;
+  modbus->msSilentInterval = getMsSilentInterval(baudrate);
+}
+
+unsigned long BLVD20KM_asukiaaa::getMsSilentInterval(unsigned long baudrate) {
+  return baudrate <= 9600 ? 6 : 4;
 }
 
 void BLVD20KM_asukiaaa::beginWithoutModbus() {
