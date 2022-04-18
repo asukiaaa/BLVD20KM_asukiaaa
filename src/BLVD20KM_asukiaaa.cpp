@@ -75,6 +75,17 @@ void BLVD20KM_asukiaaa::beginWithoutModbus() {
   writeStop();
 }
 
+uint8_t BLVD20KM_asukiaaa::writeSpeedControlModeIfDifferent(uint16_t mode) {
+  uint16_t currentMode;
+  uint8_t result = readSpeedControlMode(&currentMode);
+  if (result != 0) {
+    return result;
+  }
+  if (currentMode != mode) {
+    return writeSpeedControlMode(mode);
+  }
+}
+
 uint8_t BLVD20KM_asukiaaa::writeSpeedControlMode(uint16_t mode) {
   uint8_t result;
   result = writeRegister(ADDR_ANALOG_MODE_L, mode);
