@@ -84,6 +84,7 @@ uint8_t BLVD20KM_asukiaaa::writeSpeedControlModeIfDifferent(uint16_t mode) {
   if (currentMode != mode) {
     return writeSpeedControlMode(mode);
   }
+  return result;
 }
 
 uint8_t BLVD20KM_asukiaaa::writeSpeedControlMode(uint16_t mode) {
