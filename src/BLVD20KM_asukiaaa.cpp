@@ -218,9 +218,8 @@ uint8_t BLVD20KM_asukiaaa::readAlarm(uint16_t *alarm) {
   return readRegisters(ADDR_ALARM_L, 1, alarm);
 }
 
-uint8_t BLVD20KM_asukiaaa::readDirection(boolean *forwarding,
-                                         boolean *reversing,
-                                         boolean *freeLockOnStop) {
+uint8_t BLVD20KM_asukiaaa::readDirection(bool *forwarding, bool *reversing,
+                                         bool *freeLockOnStop) {
 #ifdef DEBUG_PRINT
   Serial.println("read direction");
 #endif

@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include <HardwareSerial.h>
 #include <rs485_asukiaaa.h>
+
 #include "./BLVD20KM_asukiaaa/version.h"
 
 #define BLVD20KM_ERROR_DIAGNOSIS_DATA_INVALID 0x16
@@ -50,8 +51,8 @@ class BLVD20KM_asukiaaa {
   uint8_t writeReverse();
 
   uint8_t readCommandSpeed(int32_t *speed);
-  uint8_t readDirection(boolean *forwarding, boolean *reversing,
-                        boolean *freeLockOnStop);
+  uint8_t readDirection(bool *forwarding, bool *reversing,
+                        bool *freeLockOnStop);
   uint8_t readFeedbackSpeed(int32_t *speed);
   uint8_t readLoadTorque(uint16_t *speed);
   uint8_t readSpeed(uint16_t *speed);
