@@ -72,6 +72,30 @@ I checked connection with using some RS485 tranceiver. Ex: [SparkFun Transceiver
 
 See [example project](./examples) and [header file](./src/BLVD20KM_asukiaaa.h).
 
+## Alarms
+
+Alarm information from ユーザーマニュアル通信編 HM-5101-5J.pdf 35-36 pages and BLV Series USER MANUAL (RS-485 Communication Mode) HM-5114E.pdf 36-37 pages.
+
+Code HEX (Dec) | Role in Japanese | Role in English
+-------------- | ---- | ----
+0x20 (32) | 過電流 | Overcurrent
+0x21 (33) | 主回路加熱 | Main ciruit overheat
+0x22 (34) | 過電圧 | Overvoltage
+0x25 (37) | 不足電圧 | Undervoltage
+0x28 (40) | センサ異常 | Sensor error
+0x2D (45) | 主回路出力異常 | Main circuit output error
+0x30 (48) | 過負荷 | Overload
+0x31 (49) | 過速度 | Overspeed
+0x41 (65) | EEPROM異常 | EEPROM error
+0x42 (66) | 初期時センサ異常 | Initial sensor error
+0x46 (70) | 初期時運転禁止 | Prevention of operation at power on
+0x6e (110) | 外部停止 | External stop
+0x81 (129) | ネットワークバス異常 | Network bus error
+0x83 (131) | 通信用スイッチ設定異常 | Communicatino switch setting error
+0x84 (132) | RS485 通信異常 | RS485 communication error
+0x85 (133) | RS485タイムアウト | RS485 communication timeout
+0x8E (142) | ネットワークコンバーター異常 | Network converter error
+
 # License
 
 MIT
