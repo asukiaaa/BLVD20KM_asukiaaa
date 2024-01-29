@@ -37,6 +37,7 @@ enum class BLVD20KM_asukiaaa_Alarm : uint8_t {
 
 class BLVD20KM_asukiaaa {
  public:
+  rs485_asukiaaa::ModbusRtu::Central *modbus;
   BLVD20KM_asukiaaa(HardwareSerial *serial, uint8_t address, uint8_t dePin,
                     uint8_t rePin);
   BLVD20KM_asukiaaa(rs485_asukiaaa::ModbusRtu::Central *modbus,
@@ -76,7 +77,6 @@ class BLVD20KM_asukiaaa {
   static unsigned long getMsSilentInterval(unsigned long baudrate);
 
  private:
-  rs485_asukiaaa::ModbusRtu::Central *modbus;
   const bool createdModbus;
   uint8_t address;
   uint8_t readInt32t(uint16_t readStartAddress, int32_t *value);
