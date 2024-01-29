@@ -235,11 +235,11 @@ uint8_t BLVD20KM_asukiaaa::readDirection(bool *forwarding, bool *reversing,
   return 0;
 }
 
-uint16_t uint8tsToUint16t(uint8_t *chars) {
+uint16_t BLVD20KM_asukiaaa::uint8tsToUint16t(uint8_t *chars) {
   return ((uint16_t)chars[0]) << 8 | (uint16_t)chars[1];
 }
 
-uint32_t uint16tsToUint32t(uint16_t *shorts) {
+uint32_t BLVD20KM_asukiaaa::uint16tsToUint32t(uint16_t *shorts) {
   return ((uint32_t)shorts[0]) << 16 | (uint32_t)shorts[1];
 }
 

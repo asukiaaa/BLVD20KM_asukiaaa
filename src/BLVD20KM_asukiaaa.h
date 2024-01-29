@@ -87,6 +87,8 @@ class BLVD20KM_asukiaaa {
   uint8_t writeConfigTrigger();
   uint8_t writeRegister(uint16_t writeAddress, uint16_t data16bit);
   void writeQuery(uint8_t fnCode, uint8_t *data, uint16_t dataLen);
+  static uint16_t uint8tsToUint16t(uint8_t *chars);
+  static uint32_t uint16tsToUint32t(uint16_t *shorts);
 
   uint16_t uint16Buffer[8];
   uint8_t uint8Buffer[41];
