@@ -26,10 +26,10 @@
 #define MOTOR_DIRECTOIN_FORWARD 1
 #define MOTOR_DIRECTOIN_REVERSE 2
 
-#define MOTOR_FORWARD_BIT B00001000
-#define MOTOR_REVERSE_BIT B00010000
-#define MOTOR_SLOW_CHANGE_BIT B00100000
-#define MOTOR_FREE_ON_STOP_BIT B10000000
+#define MOTOR_FORWARD_BIT 0b00001000
+#define MOTOR_REVERSE_BIT 0b00010000
+#define MOTOR_SLOW_CHANGE_BIT 0b00100000
+#define MOTOR_FREE_ON_STOP_BIT 0b10000000
 
 // #define DEBUG_PRINT
 
@@ -127,7 +127,7 @@ uint16_t createMotorControl16bit(uint8_t motorDirection,
   if (slowChange) {
     bits |= MOTOR_SLOW_CHANGE_BIT;
   }
-  if (motorDataNum != 0 && motorDataNum < B1000) {
+  if (motorDataNum != 0 && motorDataNum < 0b1000) {
     bits |= motorDataNum;
   }
   return bits;
