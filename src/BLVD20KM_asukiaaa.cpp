@@ -70,7 +70,7 @@ unsigned long BLVD20KM_asukiaaa::getMsSilentInterval(unsigned long baudrate) {
 }
 
 void BLVD20KM_asukiaaa::beginWithoutModbus() {
-  writeSpeedControlMode(BLVD20KM_SPEED_MODE_USE_DIGITALS);
+  writeSpeedControlModeAsDigital();
   writeSpeed(BLVD20KM_SPEED_MIN);
   writeStop();
 }
@@ -94,6 +94,10 @@ uint8_t BLVD20KM_asukiaaa::writeSpeedControlMode(uint16_t mode) {
     return result;
   }
   return writeConfigTrigger();  // trigger after setting ADDR_ANALOG_MODE
+}
+
+uint8_t BLVD20KM_asukiaaa::writeSpeedControlModeAsDigital() {
+  return writeSpeedControlMode(BLVD20KM_SPEED_MODE_USE_DIGITALS);
 }
 
 uint8_t BLVD20KM_asukiaaa::readSpeedControlMode(uint16_t *mode) {

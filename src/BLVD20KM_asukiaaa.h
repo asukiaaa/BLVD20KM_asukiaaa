@@ -62,6 +62,7 @@ class BLVD20KM_asukiaaa {
   uint8_t readTorqueLimit(uint16_t *torque);
   uint8_t writeSpeed(uint16_t speed);
   uint8_t writeSpeedControlMode(uint16_t mode);
+  uint8_t writeSpeedControlModeAsDigital();
   uint8_t writeSpeedControlModeIfDifferent(uint16_t mode);
   uint8_t writeTorqueLimit(uint16_t torque);
 
