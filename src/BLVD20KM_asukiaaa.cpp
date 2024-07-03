@@ -65,6 +65,13 @@ void BLVD20KM_asukiaaa::beginModbus(rs485_asukiaaa::ModbusRtu::Central *modbus,
   modbus->msSilentInterval = getMsSilentInterval(baudrate);
 }
 
+rs485_asukiaaa::ModbusRtu::Central *BLVD20KM_asukiaaa::getModbus() {
+  return modbus;
+}
+
+uint32_t BLVD20KM_asukiaaa::getRpmMax() { return BLVD20KM_SPEED_MAX; }
+uint32_t BLVD20KM_asukiaaa::getRpmMin() { return BLVD20KM_SPEED_MIN; }
+
 unsigned long BLVD20KM_asukiaaa::getMsSilentInterval(unsigned long baudrate) {
   return baudrate <= 9600 ? 6 : 4;
 }
@@ -85,6 +92,10 @@ uint8_t BLVD20KM_asukiaaa::writeSpeedControlModeIfDifferent(uint16_t mode) {
     return writeSpeedControlMode(mode);
   }
   return result;
+}
+
+uint8_t BLVD20KM_asukiaaa::writeSetupConfiglIfNeeded() {
+  return writeSpeedControlModeIfDifferent(BLVD20KM_SPEED_MODE_USE_DIGITALS);
 }
 
 uint8_t BLVD20KM_asukiaaa::writeSpeedControlMode(uint16_t mode) {
@@ -179,6 +190,22 @@ uint8_t BLVD20KM_asukiaaa::writeSpeed(uint16_t speed) {
   return writeRegister(ADDR_SPEED0_L, speed);
 }
 
+uint8_t BLVD20KM_asukiaaa::writeSpeed32t(int32_t speed) {
+#ifdef DEBUG_PRINT
+  Serial.println("writeSpeed " + String(speed));
+#endif
+  uint8_t result = 0;
+  if (speed < 0) {
+    result = writeReverse();
+  } else if (speed > 0) {
+    result = writeForward();
+  }
+  if (result != 0) {
+    return result;
+  }
+  return modbus->writeRegisterBy32t(address, ADDR_SPEED0_L, abs(speed));
+}
+
 uint8_t BLVD20KM_asukiaaa::writeTorqueLimit(uint16_t torque) {
 #ifdef DEBUG_PRINT
   Serial.println("writeTorque " + String(torque));
@@ -220,6 +247,13 @@ uint8_t BLVD20KM_asukiaaa::readAlarm(uint16_t *alarm) {
   Serial.println("read alarm");
 #endif
   return readRegisters(ADDR_ALARM_L, 1, alarm);
+}
+
+uint8_t BLVD20KM_asukiaaa::readAlarmU32t(uint32_t *alarm) {
+#ifdef DEBUG_PRINT
+  Serial.println("read alarm");
+#endif
+  return modbus->readRegistersBy32t(address, ADDR_ALARM_H, alarm, 1);
 }
 
 uint8_t BLVD20KM_asukiaaa::readDirection(bool *forwarding, bool *reversing,
@@ -289,8 +323,22 @@ uint8_t BLVD20KM_asukiaaa::readFeedbackSpeed(int32_t *speed) {
   return readInt32t(ADDR_FEEDBACK_SPEED_H, speed);
 }
 
+uint8_t BLVD20KM_asukiaaa::readFeedbackSpeed32t(int32_t *speed) {
+  return readFeedbackSpeed(speed);
+}
+
 uint8_t BLVD20KM_asukiaaa::readLoadTorque(uint16_t *torquePercent) {
   return readRegisters(ADDR_LOAD_FACTOR_L, 1, torquePercent);
+}
+
+uint8_t BLVD20KM_asukiaaa::readLoadTorquePercent(float *torquePercent) {
+  uint16_t torque;
+  auto result = readTorque(&torque);
+  if (result != 0) {
+    return result;
+  }
+  *torquePercent = torque;
+  return 0;
 }
 
 uint8_t BLVD20KM_asukiaaa::writeRegister(uint16_t writeAddress,

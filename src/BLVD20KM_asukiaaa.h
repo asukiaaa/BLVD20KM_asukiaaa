@@ -4,6 +4,9 @@
 #include <HardwareSerial.h>
 #include <rs485_asukiaaa.h>
 
+#include <OrientalCommon_asukiaaa.hpp>
+#include <OrientalCommon_asukiaaa/BLx.hpp>
+
 #include "./BLVD20KM_asukiaaa/version.h"
 
 #define BLVD20KM_ERROR_DIAGNOSIS_DATA_INVALID 0x16
@@ -35,7 +38,7 @@ enum class BLVD20KM_asukiaaa_Alarm : uint8_t {
   MainCicruitOutputError = 0x2d,
 };
 
-class BLVD20KM_asukiaaa {
+class BLVD20KM_asukiaaa : public OrientalCommon_asukiaaa::BLx::Base {
  public:
   rs485_asukiaaa::ModbusRtu::Central *modbus;
   BLVD20KM_asukiaaa(HardwareSerial *serial, uint8_t address, uint8_t dePin,
@@ -45,6 +48,9 @@ class BLVD20KM_asukiaaa {
   ~BLVD20KM_asukiaaa();
   void begin(unsigned long baudrate, unsigned long config = SERIAL_8E1);
   void beginWithoutModbus();
+  rs485_asukiaaa::ModbusRtu::Central *getModbus();
+  uint32_t getRpmMin();
+  uint32_t getRpmMax();
 
   uint8_t writeForward();
   uint8_t writeLock();
@@ -55,19 +61,24 @@ class BLVD20KM_asukiaaa {
   uint8_t readDirection(bool *forwarding, bool *reversing,
                         bool *freeLockOnStop);
   uint8_t readFeedbackSpeed(int32_t *speed);
-  uint8_t readLoadTorque(uint16_t *speed);
+  uint8_t readFeedbackSpeed32t(int32_t *speed);
+  uint8_t readLoadTorque(uint16_t *torque);
+  uint8_t readLoadTorquePercent(float *torquePercent);
   uint8_t readSpeed(uint16_t *speed);
   uint8_t readSpeedControlMode(uint16_t *mode);
   uint8_t readTorque(uint16_t *torque);
   uint8_t readTorqueLimit(uint16_t *torque);
   uint8_t writeSpeed(uint16_t speed);
+  uint8_t writeSpeed32t(int32_t speed);
   uint8_t writeSpeedControlMode(uint16_t mode);
   uint8_t writeSpeedControlModeAsDigital();
   uint8_t writeSpeedControlModeIfDifferent(uint16_t mode);
+  uint8_t writeSetupConfiglIfNeeded();
   uint8_t writeTorqueLimit(uint16_t torque);
 
   uint8_t writeDiagnosis();
   uint8_t readAlarm(uint16_t *alarm);
+  uint8_t readAlarmU32t(uint32_t *alarm);
   uint8_t writeResetAlarm();
 
   static String getStrOfAlarm(uint16_t alarm);
