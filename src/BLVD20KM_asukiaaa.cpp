@@ -333,7 +333,7 @@ uint8_t BLVD20KM_asukiaaa::readLoadTorque(uint16_t *torquePercent) {
 
 uint8_t BLVD20KM_asukiaaa::readLoadTorquePercent(float *torquePercent) {
   uint16_t torque;
-  auto result = readTorque(&torque);
+  auto result = readLoadTorque(&torque);
   if (result != 0) {
     return result;
   }
