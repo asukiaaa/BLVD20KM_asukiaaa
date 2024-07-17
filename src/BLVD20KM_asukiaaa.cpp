@@ -203,7 +203,7 @@ uint8_t BLVD20KM_asukiaaa::writeSpeed32t(int32_t speed) {
   if (result != 0) {
     return result;
   }
-  return modbus->writeRegisterBy32t(address, ADDR_SPEED0_L, abs(speed));
+  return modbus->writeRegisterBy32t(address, ADDR_SPEED0_H, abs(speed));
 }
 
 uint8_t BLVD20KM_asukiaaa::writeTorqueLimit(uint16_t torque) {
