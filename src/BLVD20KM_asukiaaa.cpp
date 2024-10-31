@@ -94,7 +94,7 @@ uint8_t BLVD20KM_asukiaaa::writeSpeedControlModeIfDifferent(uint16_t mode) {
   return result;
 }
 
-uint8_t BLVD20KM_asukiaaa::writeSetupConfiglIfNeeded() {
+uint8_t BLVD20KM_asukiaaa::writeSetupConfigIfNeeded() {
   return writeSpeedControlModeIfDifferent(BLVD20KM_SPEED_MODE_USE_DIGITALS);
 }
 

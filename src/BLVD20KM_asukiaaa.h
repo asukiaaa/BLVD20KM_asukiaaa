@@ -73,7 +73,7 @@ class BLVD20KM_asukiaaa : public OrientalCommon_asukiaaa::BLx::Base {
   uint8_t writeSpeedControlMode(uint16_t mode);
   uint8_t writeSpeedControlModeAsDigital();
   uint8_t writeSpeedControlModeIfDifferent(uint16_t mode);
-  uint8_t writeSetupConfiglIfNeeded();
+  uint8_t writeSetupConfigIfNeeded();
   uint8_t writeTorqueLimit(uint16_t torque);
 
   uint8_t writeDiagnosis();
